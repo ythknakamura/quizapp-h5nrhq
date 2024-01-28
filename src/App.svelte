@@ -1,18 +1,19 @@
 <script>
     import AnswerButton from "./AnswerButton.svelte";
+    import {getQuizdata} from "./quizdataFactory";
     let currentScore = 0;
     let renzokuSeikai = 0;
-    let quizdata = {mondai: "鮪", seikai: "まぐろ", taku: ["ひらめ", "かれい", "まぐろ", "ぶり", "くじら"]};
+    let quizdata = getQuizdata();
 
     const answerButtonClicked = (isCorrect) => {
-    if(isCorrect){
-        renzokuSeikai += 1;
-        currentScore += renzokuSeikai;
-    }
-    else{
-        renzokuSeikai = 0;
-    }
-};
+        if(isCorrect){
+            renzokuSeikai += 1;
+            currentScore += renzokuSeikai;
+        }
+        else{
+            renzokuSeikai = 0;
+        }
+    };
 </script>
 
 <main class="flex flex-col h-dvh">
