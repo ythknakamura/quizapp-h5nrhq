@@ -4,7 +4,7 @@
     let renzokuSeikai = 0;
     let quizdata = {mondai: "鮪", seikai: "まぐろ", taku: ["ひらめ", "かれい", "まぐろ", "ぶり", "くじら"]};
 
-    function answerButtonClicked(isCorrect){
+    const answerButtonClicked = (isCorrect) => {
     if(isCorrect){
         renzokuSeikai += 1;
         currentScore += renzokuSeikai;
@@ -12,7 +12,7 @@
     else{
         renzokuSeikai = 0;
     }
-}
+};
 </script>
 
 <main class="flex flex-col h-dvh">
