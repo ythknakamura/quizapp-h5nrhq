@@ -1,5 +1,17 @@
 /** 0以上n未満の整数をランダムに選ぶ関数 */
-const randomRange = (n) => Math.floor(Math.random() * n);
+const randomRange = (max) => Math.floor(Math.random() * max);
+
+/** 0以上max以下の整数を重複なくlen個をランダムに選ぶ関数 */
+const randomArray = (max, len) => {
+    const array = [];
+    while(array.length < len){
+        const r = randomRange(max);
+        if(!array.includes(r)){
+            array.push(r);
+        }
+    }
+    return array;
+};
 
 const QAlist = [
     {Q: "鮪", A: "まぐろ"},
@@ -14,8 +26,9 @@ const QAlist = [
 ];
 
 export const getQuizdata = () => {
-    const takuID = [0,1,2,3,4];
-    const seikaiID = 0;
+    const numberOfTaku = 5;
+    const takuID = randomArray(QAlist.length, numberOfTaku); 
+    const seikaiID = takuID[randomRange(numberOfTaku)];
     const taku = takuID.map(id => QAlist[id].A);
     return {
         mondai: QAlist[seikaiID].Q, 
