@@ -1,11 +1,33 @@
 <script>
+    import {onMount} from 'svelte';
     import AnswerButton from "./AnswerButton.svelte";
     import TitlePage from "./TitlePage.svelte";
     import {getQuizdata} from "./quizdataFactory";
-    let showTitle = true;
+
+    const [InitialState, TitleState, QuestionState, AnswerState, GameoverState] = [0, 1, 2, 3, 4];
+    let state = InitialState;
     let currentScore = 0;
     let renzokuSeikai = 0;
-    let quizdata = getQuizdata();
+    let quizdata;
+
+    onMount(()=>{
+        changeToTitle();
+    });
+
+    const changeToTitle = () => {
+        state = TitleState;
+    };
+    const changeToQuestion = () => {
+        quizdata = getQuizdata();
+        state = QuestionState;
+    };
+    const changeToAnswer = () => {
+        state = AnswerState;
+        setTimeout(changeToQuestion, 1000);
+    };
+    const changeToGameover = () => {
+        state = GameoverState;
+    };
 
     const answerButtonClicked = (isCorrect) => {
         if(isCorrect){
@@ -15,14 +37,13 @@
         else{
             renzokuSeikai = 0;
         }
-
-        quizdata = getQuizdata();
+        changeToAnswer();
     };
 </script>
 
-{#if showTitle}
-    <TitlePage on:click={()=>showTitle=false}></TitlePage>
-{:else}
+{#if state===TitleState}
+    <TitlePage on:click={changeToQuestion}></TitlePage>
+{:else if state===QuestionState || state===AnswerState}
     <main class="flex flex-col h-dvh">
         <!-- メニューバー -->
         <div class="bg-red-200 flex justify-around text-xl font-bold p-3">
@@ -36,7 +57,11 @@
         <!-- 選択肢 -->
         <div class="bg-blue-200 flex flex-col justify-around flex-grow items-center">
             {#each quizdata.taku as t}
-                <AnswerButton on:click={() => answerButtonClicked(quizdata.seikai===t)}>{t}</AnswerButton>
+                <AnswerButton
+                    isGrayout={state===AnswerState && quizdata.seikai!==t}
+                    on:click={() => answerButtonClicked(quizdata.seikai===t)}>
+                    {t}
+                </AnswerButton>
             {/each}
         </div>
     </main>
